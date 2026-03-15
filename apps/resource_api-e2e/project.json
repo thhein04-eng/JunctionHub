@@ -1,0 +1,17 @@
+{
+  "name": "resource_api-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "implicitDependencies": ["resource_api"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/resource_api-e2e/jest.config.cts",
+        "passWithNoTests": true
+      },
+      "dependsOn": ["resource_api:build", "resource_api:serve"]
+    }
+  }
+}
