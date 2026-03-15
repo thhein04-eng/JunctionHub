@@ -185,8 +185,8 @@ export type ResourceWhereInput = {
   OR?: Prisma.ResourceWhereInput[]
   NOT?: Prisma.ResourceWhereInput | Prisma.ResourceWhereInput[]
   id?: Prisma.UuidFilter<"Resource"> | string
-  orgId?: Prisma.StringFilter<"Resource"> | string
-  resourceTypeDefinitionId?: Prisma.StringFilter<"Resource"> | string
+  orgId?: Prisma.UuidFilter<"Resource"> | string
+  resourceTypeDefinitionId?: Prisma.UuidFilter<"Resource"> | string
   name?: Prisma.StringFilter<"Resource"> | string
   createdAt?: Prisma.DateTimeFilter<"Resource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resource"> | Date | string
@@ -214,8 +214,8 @@ export type ResourceWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ResourceWhereInput | Prisma.ResourceWhereInput[]
   OR?: Prisma.ResourceWhereInput[]
   NOT?: Prisma.ResourceWhereInput | Prisma.ResourceWhereInput[]
-  orgId?: Prisma.StringFilter<"Resource"> | string
-  resourceTypeDefinitionId?: Prisma.StringFilter<"Resource"> | string
+  orgId?: Prisma.UuidFilter<"Resource"> | string
+  resourceTypeDefinitionId?: Prisma.UuidFilter<"Resource"> | string
   name?: Prisma.StringFilter<"Resource"> | string
   createdAt?: Prisma.DateTimeFilter<"Resource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resource"> | Date | string
@@ -242,8 +242,8 @@ export type ResourceScalarWhereWithAggregatesInput = {
   OR?: Prisma.ResourceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ResourceScalarWhereWithAggregatesInput | Prisma.ResourceScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Resource"> | string
-  orgId?: Prisma.StringWithAggregatesFilter<"Resource"> | string
-  resourceTypeDefinitionId?: Prisma.StringWithAggregatesFilter<"Resource"> | string
+  orgId?: Prisma.UuidWithAggregatesFilter<"Resource"> | string
+  resourceTypeDefinitionId?: Prisma.UuidWithAggregatesFilter<"Resource"> | string
   name?: Prisma.StringWithAggregatesFilter<"Resource"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Resource"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Resource"> | Date | string
@@ -523,8 +523,8 @@ export type ResourceScalarWhereInput = {
   OR?: Prisma.ResourceScalarWhereInput[]
   NOT?: Prisma.ResourceScalarWhereInput | Prisma.ResourceScalarWhereInput[]
   id?: Prisma.UuidFilter<"Resource"> | string
-  orgId?: Prisma.StringFilter<"Resource"> | string
-  resourceTypeDefinitionId?: Prisma.StringFilter<"Resource"> | string
+  orgId?: Prisma.UuidFilter<"Resource"> | string
+  resourceTypeDefinitionId?: Prisma.UuidFilter<"Resource"> | string
   name?: Prisma.StringFilter<"Resource"> | string
   createdAt?: Prisma.DateTimeFilter<"Resource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resource"> | Date | string

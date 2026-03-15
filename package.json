@@ -7,7 +7,9 @@
     "prisma:migrate-init": "npx prisma migrate dev --name init --config libs/shared/data-access-prisma/prisma.config.ts",
     "prisma:migrate-reset": "npx prisma migrate reset --config libs/shared/data-access-prisma/prisma.config.ts",
     "prisma:generate": "npx prisma generate --config libs/shared/data-access-prisma/prisma.config.ts",
-    "prisma:format": "npx prisma generate --config libs/shared/data-access-prisma/prisma.config.ts"
+    "prisma:format": "npx prisma generate --config libs/shared/data-access-prisma/prisma.config.ts",
+    "prisma:seed": "ts-node --project libs/shared/data-access-prisma/tsconfig.json libs/shared/data-access-prisma/prisma/seed.ts",
+    "prisma:seed-delete": "ts-node --project libs/shared/data-access-prisma/tsconfig.json libs/shared/data-access-prisma/prisma/seed.ts delete"
   },
   "private": true,
   "dependencies": {

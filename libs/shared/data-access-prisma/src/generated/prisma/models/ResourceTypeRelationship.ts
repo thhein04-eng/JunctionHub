@@ -185,9 +185,9 @@ export type ResourceTypeRelationshipWhereInput = {
   OR?: Prisma.ResourceTypeRelationshipWhereInput[]
   NOT?: Prisma.ResourceTypeRelationshipWhereInput | Prisma.ResourceTypeRelationshipWhereInput[]
   id?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
-  industryTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
-  sourceResourceTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
-  targetResourceTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
+  industryTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
+  sourceResourceTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
+  targetResourceTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
   relationLabel?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
   createdAt?: Prisma.DateTimeFilter<"ResourceTypeRelationship"> | Date | string
   industryType?: Prisma.XOR<Prisma.IndustryTypeScalarRelationFilter, Prisma.IndustryTypeWhereInput>
@@ -215,9 +215,9 @@ export type ResourceTypeRelationshipWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ResourceTypeRelationshipWhereInput | Prisma.ResourceTypeRelationshipWhereInput[]
   OR?: Prisma.ResourceTypeRelationshipWhereInput[]
   NOT?: Prisma.ResourceTypeRelationshipWhereInput | Prisma.ResourceTypeRelationshipWhereInput[]
-  industryTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
-  sourceResourceTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
-  targetResourceTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
+  industryTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
+  sourceResourceTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
+  targetResourceTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
   relationLabel?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
   createdAt?: Prisma.DateTimeFilter<"ResourceTypeRelationship"> | Date | string
   industryType?: Prisma.XOR<Prisma.IndustryTypeScalarRelationFilter, Prisma.IndustryTypeWhereInput>
@@ -243,9 +243,9 @@ export type ResourceTypeRelationshipScalarWhereWithAggregatesInput = {
   OR?: Prisma.ResourceTypeRelationshipScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ResourceTypeRelationshipScalarWhereWithAggregatesInput | Prisma.ResourceTypeRelationshipScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"ResourceTypeRelationship"> | string
-  industryTypeId?: Prisma.StringWithAggregatesFilter<"ResourceTypeRelationship"> | string
-  sourceResourceTypeId?: Prisma.StringWithAggregatesFilter<"ResourceTypeRelationship"> | string
-  targetResourceTypeId?: Prisma.StringWithAggregatesFilter<"ResourceTypeRelationship"> | string
+  industryTypeId?: Prisma.UuidWithAggregatesFilter<"ResourceTypeRelationship"> | string
+  sourceResourceTypeId?: Prisma.UuidWithAggregatesFilter<"ResourceTypeRelationship"> | string
+  targetResourceTypeId?: Prisma.UuidWithAggregatesFilter<"ResourceTypeRelationship"> | string
   relationLabel?: Prisma.StringWithAggregatesFilter<"ResourceTypeRelationship"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ResourceTypeRelationship"> | Date | string
 }
@@ -552,9 +552,9 @@ export type ResourceTypeRelationshipScalarWhereInput = {
   OR?: Prisma.ResourceTypeRelationshipScalarWhereInput[]
   NOT?: Prisma.ResourceTypeRelationshipScalarWhereInput | Prisma.ResourceTypeRelationshipScalarWhereInput[]
   id?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
-  industryTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
-  sourceResourceTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
-  targetResourceTypeId?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
+  industryTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
+  sourceResourceTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
+  targetResourceTypeId?: Prisma.UuidFilter<"ResourceTypeRelationship"> | string
   relationLabel?: Prisma.StringFilter<"ResourceTypeRelationship"> | string
   createdAt?: Prisma.DateTimeFilter<"ResourceTypeRelationship"> | Date | string
 }

@@ -185,7 +185,7 @@ export type ResourceTypeDefinitionWhereInput = {
   OR?: Prisma.ResourceTypeDefinitionWhereInput[]
   NOT?: Prisma.ResourceTypeDefinitionWhereInput | Prisma.ResourceTypeDefinitionWhereInput[]
   id?: Prisma.UuidFilter<"ResourceTypeDefinition"> | string
-  industryTypeId?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
+  industryTypeId?: Prisma.UuidFilter<"ResourceTypeDefinition"> | string
   slug?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
   label?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
   isEssential?: Prisma.BoolFilter<"ResourceTypeDefinition"> | boolean
@@ -215,7 +215,7 @@ export type ResourceTypeDefinitionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ResourceTypeDefinitionWhereInput | Prisma.ResourceTypeDefinitionWhereInput[]
   OR?: Prisma.ResourceTypeDefinitionWhereInput[]
   NOT?: Prisma.ResourceTypeDefinitionWhereInput | Prisma.ResourceTypeDefinitionWhereInput[]
-  industryTypeId?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
+  industryTypeId?: Prisma.UuidFilter<"ResourceTypeDefinition"> | string
   slug?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
   label?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
   isEssential?: Prisma.BoolFilter<"ResourceTypeDefinition"> | boolean
@@ -243,7 +243,7 @@ export type ResourceTypeDefinitionScalarWhereWithAggregatesInput = {
   OR?: Prisma.ResourceTypeDefinitionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ResourceTypeDefinitionScalarWhereWithAggregatesInput | Prisma.ResourceTypeDefinitionScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"ResourceTypeDefinition"> | string
-  industryTypeId?: Prisma.StringWithAggregatesFilter<"ResourceTypeDefinition"> | string
+  industryTypeId?: Prisma.UuidWithAggregatesFilter<"ResourceTypeDefinition"> | string
   slug?: Prisma.StringWithAggregatesFilter<"ResourceTypeDefinition"> | string
   label?: Prisma.StringWithAggregatesFilter<"ResourceTypeDefinition"> | string
   isEssential?: Prisma.BoolWithAggregatesFilter<"ResourceTypeDefinition"> | boolean
@@ -512,7 +512,7 @@ export type ResourceTypeDefinitionScalarWhereInput = {
   OR?: Prisma.ResourceTypeDefinitionScalarWhereInput[]
   NOT?: Prisma.ResourceTypeDefinitionScalarWhereInput | Prisma.ResourceTypeDefinitionScalarWhereInput[]
   id?: Prisma.UuidFilter<"ResourceTypeDefinition"> | string
-  industryTypeId?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
+  industryTypeId?: Prisma.UuidFilter<"ResourceTypeDefinition"> | string
   slug?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
   label?: Prisma.StringFilter<"ResourceTypeDefinition"> | string
   isEssential?: Prisma.BoolFilter<"ResourceTypeDefinition"> | boolean

@@ -11,10 +11,7 @@ import {
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
-import {
-  Prisma,
-  Organization as OrganizationModel,
-} from '@junction-hub/shared/data-access-prisma';
+import { Organization as OrganizationModel } from '@junction-hub/shared/data-access-prisma';
 import { FindAllOrganizationDto } from './dto/find-all-organization.dto';
 
 @Controller('organization')
@@ -31,7 +28,7 @@ export class OrganizationController {
     @Query()
     params: FindAllOrganizationDto,
   ): Promise<OrganizationModel[]> {
-    return this.organizationService.findAll(params);
+    return this.organizationService.findAllByParams(params);
   }
 
   @Get(':id')
