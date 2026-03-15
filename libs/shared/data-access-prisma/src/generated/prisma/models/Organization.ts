@@ -27,16 +27,25 @@ export type AggregateOrganization = {
 export type OrganizationMinAggregateOutputType = {
   id: string | null
   name: string | null
+  industryTypeId: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type OrganizationMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  industryTypeId: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type OrganizationCountAggregateOutputType = {
   id: number
   name: number
+  industryTypeId: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -44,16 +53,25 @@ export type OrganizationCountAggregateOutputType = {
 export type OrganizationMinAggregateInputType = {
   id?: true
   name?: true
+  industryTypeId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type OrganizationMaxAggregateInputType = {
   id?: true
   name?: true
+  industryTypeId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type OrganizationCountAggregateInputType = {
   id?: true
   name?: true
+  industryTypeId?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -132,6 +150,9 @@ export type OrganizationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type OrganizationGroupByOutputType = {
   id: string
   name: string
+  industryTypeId: string
+  createdAt: Date
+  updatedAt: Date
   _count: OrganizationCountAggregateOutputType | null
   _min: OrganizationMinAggregateOutputType | null
   _max: OrganizationMaxAggregateOutputType | null
@@ -158,13 +179,23 @@ export type OrganizationWhereInput = {
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   id?: Prisma.UuidFilter<"Organization"> | string
   name?: Prisma.StringFilter<"Organization"> | string
+  industryTypeId?: Prisma.StringFilter<"Organization"> | string
+  createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  industryType?: Prisma.XOR<Prisma.IndustryTypeScalarRelationFilter, Prisma.IndustryTypeWhereInput>
   members?: Prisma.MemberListRelationFilter
+  resources?: Prisma.ResourceListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  industryTypeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  industryType?: Prisma.IndustryTypeOrderByWithRelationInput
   members?: Prisma.MemberOrderByRelationAggregateInput
+  resources?: Prisma.ResourceOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -173,12 +204,20 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.OrganizationWhereInput[]
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   name?: Prisma.StringFilter<"Organization"> | string
+  industryTypeId?: Prisma.StringFilter<"Organization"> | string
+  createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  industryType?: Prisma.XOR<Prisma.IndustryTypeScalarRelationFilter, Prisma.IndustryTypeWhereInput>
   members?: Prisma.MemberListRelationFilter
+  resources?: Prisma.ResourceListRelationFilter
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  industryTypeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.OrganizationCountOrderByAggregateInput
   _max?: Prisma.OrganizationMaxOrderByAggregateInput
   _min?: Prisma.OrganizationMinOrderByAggregateInput
@@ -190,60 +229,106 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.OrganizationScalarWhereWithAggregatesInput | Prisma.OrganizationScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Organization"> | string
   name?: Prisma.StringWithAggregatesFilter<"Organization"> | string
+  industryTypeId?: Prisma.StringWithAggregatesFilter<"Organization"> | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
 }
 
 export type OrganizationCreateInput = {
   id?: string
   name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  industryType: Prisma.IndustryTypeCreateNestedOneWithoutOrganizationsInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+  resources?: Prisma.ResourceCreateNestedManyWithoutOrgInput
 }
 
 export type OrganizationUncheckedCreateInput = {
   id?: string
   name: string
+  industryTypeId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+  resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutOrgInput
 }
 
 export type OrganizationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  industryType?: Prisma.IndustryTypeUpdateOneRequiredWithoutOrganizationsNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+  resources?: Prisma.ResourceUpdateManyWithoutOrgNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+  resources?: Prisma.ResourceUncheckedUpdateManyWithoutOrgNestedInput
 }
 
 export type OrganizationCreateManyInput = {
   id?: string
   name: string
+  industryTypeId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OrganizationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OrganizationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OrganizationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  industryTypeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type OrganizationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  industryTypeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type OrganizationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  industryTypeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type OrganizationListRelationFilter = {
+  every?: Prisma.OrganizationWhereInput
+  some?: Prisma.OrganizationWhereInput
+  none?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type OrganizationScalarRelationFilter = {
@@ -253,6 +338,66 @@ export type OrganizationScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type OrganizationCreateNestedManyWithoutIndustryTypeInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput> | Prisma.OrganizationCreateWithoutIndustryTypeInput[] | Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput[]
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput | Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput[]
+  createMany?: Prisma.OrganizationCreateManyIndustryTypeInputEnvelope
+  connect?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+}
+
+export type OrganizationUncheckedCreateNestedManyWithoutIndustryTypeInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput> | Prisma.OrganizationCreateWithoutIndustryTypeInput[] | Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput[]
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput | Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput[]
+  createMany?: Prisma.OrganizationCreateManyIndustryTypeInputEnvelope
+  connect?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+}
+
+export type OrganizationUpdateManyWithoutIndustryTypeNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput> | Prisma.OrganizationCreateWithoutIndustryTypeInput[] | Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput[]
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput | Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput[]
+  upsert?: Prisma.OrganizationUpsertWithWhereUniqueWithoutIndustryTypeInput | Prisma.OrganizationUpsertWithWhereUniqueWithoutIndustryTypeInput[]
+  createMany?: Prisma.OrganizationCreateManyIndustryTypeInputEnvelope
+  set?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  disconnect?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  delete?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  connect?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  update?: Prisma.OrganizationUpdateWithWhereUniqueWithoutIndustryTypeInput | Prisma.OrganizationUpdateWithWhereUniqueWithoutIndustryTypeInput[]
+  updateMany?: Prisma.OrganizationUpdateManyWithWhereWithoutIndustryTypeInput | Prisma.OrganizationUpdateManyWithWhereWithoutIndustryTypeInput[]
+  deleteMany?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
+}
+
+export type OrganizationUncheckedUpdateManyWithoutIndustryTypeNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput> | Prisma.OrganizationCreateWithoutIndustryTypeInput[] | Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput[]
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput | Prisma.OrganizationCreateOrConnectWithoutIndustryTypeInput[]
+  upsert?: Prisma.OrganizationUpsertWithWhereUniqueWithoutIndustryTypeInput | Prisma.OrganizationUpsertWithWhereUniqueWithoutIndustryTypeInput[]
+  createMany?: Prisma.OrganizationCreateManyIndustryTypeInputEnvelope
+  set?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  disconnect?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  delete?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  connect?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
+  update?: Prisma.OrganizationUpdateWithWhereUniqueWithoutIndustryTypeInput | Prisma.OrganizationUpdateWithWhereUniqueWithoutIndustryTypeInput[]
+  updateMany?: Prisma.OrganizationUpdateManyWithWhereWithoutIndustryTypeInput | Prisma.OrganizationUpdateManyWithWhereWithoutIndustryTypeInput[]
+  deleteMany?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
+}
+
+export type OrganizationCreateNestedOneWithoutResourcesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutResourcesInput, Prisma.OrganizationUncheckedCreateWithoutResourcesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutResourcesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutResourcesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutResourcesInput, Prisma.OrganizationUncheckedCreateWithoutResourcesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutResourcesInput
+  upsert?: Prisma.OrganizationUpsertWithoutResourcesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutResourcesInput, Prisma.OrganizationUpdateWithoutResourcesInput>, Prisma.OrganizationUncheckedUpdateWithoutResourcesInput>
 }
 
 export type OrganizationCreateNestedOneWithoutMembersInput = {
@@ -269,14 +414,129 @@ export type OrganizationUpdateOneRequiredWithoutMembersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutMembersInput, Prisma.OrganizationUpdateWithoutMembersInput>, Prisma.OrganizationUncheckedUpdateWithoutMembersInput>
 }
 
+export type OrganizationCreateWithoutIndustryTypeInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+  resources?: Prisma.ResourceCreateNestedManyWithoutOrgInput
+}
+
+export type OrganizationUncheckedCreateWithoutIndustryTypeInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+  resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutOrgInput
+}
+
+export type OrganizationCreateOrConnectWithoutIndustryTypeInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput>
+}
+
+export type OrganizationCreateManyIndustryTypeInputEnvelope = {
+  data: Prisma.OrganizationCreateManyIndustryTypeInput | Prisma.OrganizationCreateManyIndustryTypeInput[]
+  skipDuplicates?: boolean
+}
+
+export type OrganizationUpsertWithWhereUniqueWithoutIndustryTypeInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedUpdateWithoutIndustryTypeInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedCreateWithoutIndustryTypeInput>
+}
+
+export type OrganizationUpdateWithWhereUniqueWithoutIndustryTypeInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutIndustryTypeInput, Prisma.OrganizationUncheckedUpdateWithoutIndustryTypeInput>
+}
+
+export type OrganizationUpdateManyWithWhereWithoutIndustryTypeInput = {
+  where: Prisma.OrganizationScalarWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateManyMutationInput, Prisma.OrganizationUncheckedUpdateManyWithoutIndustryTypeInput>
+}
+
+export type OrganizationScalarWhereInput = {
+  AND?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
+  OR?: Prisma.OrganizationScalarWhereInput[]
+  NOT?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Organization"> | string
+  name?: Prisma.StringFilter<"Organization"> | string
+  industryTypeId?: Prisma.StringFilter<"Organization"> | string
+  createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+}
+
+export type OrganizationCreateWithoutResourcesInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  industryType: Prisma.IndustryTypeCreateNestedOneWithoutOrganizationsInput
+  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutResourcesInput = {
+  id?: string
+  name: string
+  industryTypeId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutResourcesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutResourcesInput, Prisma.OrganizationUncheckedCreateWithoutResourcesInput>
+}
+
+export type OrganizationUpsertWithoutResourcesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutResourcesInput, Prisma.OrganizationUncheckedUpdateWithoutResourcesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutResourcesInput, Prisma.OrganizationUncheckedCreateWithoutResourcesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutResourcesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutResourcesInput, Prisma.OrganizationUncheckedUpdateWithoutResourcesInput>
+}
+
+export type OrganizationUpdateWithoutResourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  industryType?: Prisma.IndustryTypeUpdateOneRequiredWithoutOrganizationsNestedInput
+  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutResourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
 export type OrganizationCreateWithoutMembersInput = {
   id?: string
   name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  industryType: Prisma.IndustryTypeCreateNestedOneWithoutOrganizationsInput
+  resources?: Prisma.ResourceCreateNestedManyWithoutOrgInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembersInput = {
   id?: string
   name: string
+  industryTypeId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutOrgInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembersInput = {
@@ -298,11 +558,51 @@ export type OrganizationUpdateToOneWithWhereWithoutMembersInput = {
 export type OrganizationUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  industryType?: Prisma.IndustryTypeUpdateOneRequiredWithoutOrganizationsNestedInput
+  resources?: Prisma.ResourceUpdateManyWithoutOrgNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resources?: Prisma.ResourceUncheckedUpdateManyWithoutOrgNestedInput
+}
+
+export type OrganizationCreateManyIndustryTypeInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type OrganizationUpdateWithoutIndustryTypeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+  resources?: Prisma.ResourceUpdateManyWithoutOrgNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutIndustryTypeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+  resources?: Prisma.ResourceUncheckedUpdateManyWithoutOrgNestedInput
+}
+
+export type OrganizationUncheckedUpdateManyWithoutIndustryTypeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -312,10 +612,12 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
 
 export type OrganizationCountOutputType = {
   members: number
+  resources: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | OrganizationCountOutputTypeCountMembersArgs
+  resources?: boolean | OrganizationCountOutputTypeCountResourcesArgs
 }
 
 /**
@@ -335,45 +637,79 @@ export type OrganizationCountOutputTypeCountMembersArgs<ExtArgs extends runtime.
   where?: Prisma.MemberWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountResourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResourceWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  industryTypeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
+  resources?: boolean | Prisma.Organization$resourcesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  industryTypeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  industryTypeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectScalar = {
   id?: boolean
   name?: boolean
+  industryTypeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "industryTypeId" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
+  resources?: boolean | Prisma.Organization$resourcesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type OrganizationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
+}
+export type OrganizationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
+}
 
 export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Organization"
   objects: {
+    industryType: Prisma.$IndustryTypePayload<ExtArgs>
     members: Prisma.$MemberPayload<ExtArgs>[]
+    resources: Prisma.$ResourcePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    industryTypeId: string
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["organization"]>
   composites: {}
 }
@@ -768,7 +1104,9 @@ readonly fields: OrganizationFieldRefs;
  */
 export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  industryType<T extends Prisma.IndustryTypeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IndustryTypeDefaultArgs<ExtArgs>>): Prisma.Prisma__IndustryTypeClient<runtime.Types.Result.GetResult<Prisma.$IndustryTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   members<T extends Prisma.Organization$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  resources<T extends Prisma.Organization$resourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$resourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -800,6 +1138,9 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
 export interface OrganizationFieldRefs {
   readonly id: Prisma.FieldRef<"Organization", 'String'>
   readonly name: Prisma.FieldRef<"Organization", 'String'>
+  readonly industryTypeId: Prisma.FieldRef<"Organization", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Organization", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Organization", 'DateTime'>
 }
     
 
@@ -1054,6 +1395,10 @@ export type OrganizationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    */
   data: Prisma.OrganizationCreateManyInput | Prisma.OrganizationCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1124,6 +1469,10 @@ export type OrganizationUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many Organizations to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1214,6 +1563,30 @@ export type Organization$membersArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.MemberScalarFieldEnum | Prisma.MemberScalarFieldEnum[]
+}
+
+/**
+ * Organization.resources
+ */
+export type Organization$resourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Resource
+   */
+  select?: Prisma.ResourceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Resource
+   */
+  omit?: Prisma.ResourceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResourceInclude<ExtArgs> | null
+  where?: Prisma.ResourceWhereInput
+  orderBy?: Prisma.ResourceOrderByWithRelationInput | Prisma.ResourceOrderByWithRelationInput[]
+  cursor?: Prisma.ResourceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResourceScalarFieldEnum | Prisma.ResourceScalarFieldEnum[]
 }
 
 /**

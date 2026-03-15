@@ -45,6 +45,31 @@ export { Prisma }
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model IndustryType
+ * 
+ */
+export type IndustryType = Prisma.IndustryTypeModel
+/**
+ * Model ResourceTypeDefinition
+ * 
+ */
+export type ResourceTypeDefinition = Prisma.ResourceTypeDefinitionModel
+/**
+ * Model ResourceTypeRelationship
+ * 
+ */
+export type ResourceTypeRelationship = Prisma.ResourceTypeRelationshipModel
+/**
+ * Model Resource
+ * 
+ */
+export type Resource = Prisma.ResourceModel
+/**
+ * Model ResourceRelationship
+ * 
+ */
+export type ResourceRelationship = Prisma.ResourceRelationshipModel
+/**
  * Model Member
  * 
  */

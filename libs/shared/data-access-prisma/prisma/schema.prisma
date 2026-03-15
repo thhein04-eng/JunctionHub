@@ -13,21 +13,107 @@ datasource db {
 }
 
 model Organization {
-  id      String   @id @default(uuid(7)) @db.Uuid
-  name    String
-  members Member[]
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String
+  industryTypeId String   @map("industry_type_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  industryType IndustryType @relation(fields: [industryTypeId], references: [id])
+  members      Member[]
+  resources    Resource[]
 
   @@map("organization")
 }
 
+model IndustryType {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique
+  label     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  resourceTypeDefs ResourceTypeDefinition[]
+  relationships    ResourceTypeRelationship[]
+  organizations    Organization[]
+
+  @@map("industry_type")
+}
+
+model ResourceTypeDefinition {
+  id             String   @id @default(uuid()) @db.Uuid
+  industryTypeId String   @map("industry_type_id") @db.Uuid
+  slug           String
+  label          String
+  isEssential    Boolean  @default(false) @map("is_essential")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  industryType        IndustryType               @relation(fields: [industryTypeId], references: [id])
+  sourceRelationships ResourceTypeRelationship[]  @relation("SourceResourceType")
+  targetRelationships ResourceTypeRelationship[]  @relation("TargetResourceType")
+  resources           Resource[]
+
+  @@unique([industryTypeId, slug])
+  @@map("resource_type_definition")
+}
+
+model ResourceTypeRelationship {
+  id                   String   @id @default(uuid()) @db.Uuid
+  industryTypeId       String   @map("industry_type_id") @db.Uuid
+  sourceResourceTypeId String   @map("source_resource_type_id") @db.Uuid
+  targetResourceTypeId String   @map("target_resource_type_id") @db.Uuid
+  relationLabel        String   @map("relation_label")
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  industryType       IndustryType           @relation(fields: [industryTypeId], references: [id])
+  sourceResourceType ResourceTypeDefinition @relation("SourceResourceType", fields: [sourceResourceTypeId], references: [id])
+  targetResourceType ResourceTypeDefinition @relation("TargetResourceType", fields: [targetResourceTypeId], references: [id])
+  instances          ResourceRelationship[]
+
+  @@unique([industryTypeId, sourceResourceTypeId, targetResourceTypeId, relationLabel])
+  @@map("resource_type_relationship")
+}
+
+model Resource {
+  id                       String   @id @default(uuid()) @db.Uuid
+  orgId                    String   @map("org_id") @db.Uuid
+  resourceTypeDefinitionId String   @map("resource_type_definition_id") @db.Uuid
+  name                     String
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+
+  org             Organization           @relation(fields: [orgId], references: [id])
+  resourceTypeDef ResourceTypeDefinition @relation(fields: [resourceTypeDefinitionId], references: [id])
+  sourceRelationships ResourceRelationship[] @relation("SourceResource")
+  targetRelationships ResourceRelationship[] @relation("TargetResource")
+
+  @@map("resource")
+}
+
+model ResourceRelationship {
+  id                String   @id @default(uuid()) @db.Uuid
+  orgId             String   @map("org_id") @db.Uuid
+  relationshipDefId String   @map("relationship_def_id") @db.Uuid
+  sourceResourceId  String   @map("source_resource_id") @db.Uuid
+  targetResourceId  String   @map("target_resource_id") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  relationshipDef ResourceTypeRelationship @relation(fields: [relationshipDefId], references: [id])
+  sourceResource  Resource                 @relation("SourceResource", fields: [sourceResourceId], references: [id])
+  targetResource  Resource                 @relation("TargetResource", fields: [targetResourceId], references: [id])
+
+  @@unique([orgId, relationshipDefId, sourceResourceId, targetResourceId])
+  @@map("resource_relationship")
+}
+
 model Member {
-  id             String       @id @default(uuid(7)) @db.Uuid
-  firstName      String       @map("first_name")
-  lastName       String       @map("last_name")
-  createdAt      DateTime     @default(now()) @map("created_at")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String       @map("organization_id") @db.Uuid
+  id             String   @id @default(uuid()) @db.Uuid
+  firstName      String   @map("first_name")
+  lastName       String   @map("last_name")
+  organizationId String   @map("organization_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id])
 
   @@map("member")
 }

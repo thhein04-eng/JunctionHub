@@ -52,6 +52,11 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Organization: 'Organization',
+  IndustryType: 'IndustryType',
+  ResourceTypeDefinition: 'ResourceTypeDefinition',
+  ResourceTypeRelationship: 'ResourceTypeRelationship',
+  Resource: 'Resource',
+  ResourceRelationship: 'ResourceRelationship',
   Member: 'Member'
 } as const
 
@@ -73,10 +78,71 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const OrganizationScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  industryTypeId: 'industryTypeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const IndustryTypeScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  label: 'label',
+  createdAt: 'createdAt'
+} as const
+
+export type IndustryTypeScalarFieldEnum = (typeof IndustryTypeScalarFieldEnum)[keyof typeof IndustryTypeScalarFieldEnum]
+
+
+export const ResourceTypeDefinitionScalarFieldEnum = {
+  id: 'id',
+  industryTypeId: 'industryTypeId',
+  slug: 'slug',
+  label: 'label',
+  isEssential: 'isEssential',
+  createdAt: 'createdAt'
+} as const
+
+export type ResourceTypeDefinitionScalarFieldEnum = (typeof ResourceTypeDefinitionScalarFieldEnum)[keyof typeof ResourceTypeDefinitionScalarFieldEnum]
+
+
+export const ResourceTypeRelationshipScalarFieldEnum = {
+  id: 'id',
+  industryTypeId: 'industryTypeId',
+  sourceResourceTypeId: 'sourceResourceTypeId',
+  targetResourceTypeId: 'targetResourceTypeId',
+  relationLabel: 'relationLabel',
+  createdAt: 'createdAt'
+} as const
+
+export type ResourceTypeRelationshipScalarFieldEnum = (typeof ResourceTypeRelationshipScalarFieldEnum)[keyof typeof ResourceTypeRelationshipScalarFieldEnum]
+
+
+export const ResourceScalarFieldEnum = {
+  id: 'id',
+  orgId: 'orgId',
+  resourceTypeDefinitionId: 'resourceTypeDefinitionId',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResourceScalarFieldEnum = (typeof ResourceScalarFieldEnum)[keyof typeof ResourceScalarFieldEnum]
+
+
+export const ResourceRelationshipScalarFieldEnum = {
+  id: 'id',
+  orgId: 'orgId',
+  relationshipDefId: 'relationshipDefId',
+  sourceResourceId: 'sourceResourceId',
+  targetResourceId: 'targetResourceId',
+  createdAt: 'createdAt'
+} as const
+
+export type ResourceRelationshipScalarFieldEnum = (typeof ResourceRelationshipScalarFieldEnum)[keyof typeof ResourceRelationshipScalarFieldEnum]
 
 
 export const MemberScalarFieldEnum = {

@@ -9,5 +9,10 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Organization'
+export type * from './models/IndustryType'
+export type * from './models/ResourceTypeDefinition'
+export type * from './models/ResourceTypeRelationship'
+export type * from './models/Resource'
+export type * from './models/ResourceRelationship'
 export type * from './models/Member'
 export type * from './commonInputTypes'
