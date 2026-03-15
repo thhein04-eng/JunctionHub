@@ -23,22 +23,16 @@ export class OrganizationService {
     });
   }
 
-  async findAll(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.OrganizationWhereUniqueInput;
-    where?: Prisma.OrganizationWhereInput;
-    orderBy?: Prisma.OrganizationOrderByWithRelationInput;
-  }): Promise<Organization[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-
-    return this.dataAccessPrismaService.organization.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
+  async findAll(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.OrganizationWhereUniqueInput;
+      where?: Prisma.OrganizationWhereInput;
+      orderBy?: Prisma.OrganizationOrderByWithRelationInput;
+    } = {},
+  ): Promise<Organization[]> {
+    return this.dataAccessPrismaService.organization.findMany(params);
   }
 
   async findOne(id: string): Promise<Organization | null> {

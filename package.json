@@ -2,7 +2,10 @@
   "name": "@junction-hub/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "prisma:migrate": "npx prisma migrate dev --config libs/shared/data-access-prisma/prisma.config.ts",
+    "prisma:generate": "npx prisma generate --config libs/shared/data-access-prisma/prisma.config.ts"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "~21.1.0",
@@ -21,6 +24,8 @@
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "axios": "^1.6.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0"
   },

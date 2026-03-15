@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
@@ -14,6 +15,7 @@ import {
   Prisma,
   Organization as OrganizationModel,
 } from '@junction-hub/shared/data-access-prisma';
+import { FindAllOrganizationDto } from './dto/find-all-organization.dto';
 
 @Controller('organization')
 export class OrganizationController {
@@ -25,13 +27,10 @@ export class OrganizationController {
   }
 
   @Get()
-  async findAll(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.OrganizationWhereUniqueInput;
-    where?: Prisma.OrganizationWhereInput;
-    orderBy?: Prisma.OrganizationOrderByWithRelationInput;
-  }): Promise<OrganizationModel[]> {
+  async findAll(
+    @Query()
+    params: FindAllOrganizationDto,
+  ): Promise<OrganizationModel[]> {
     return this.organizationService.findAll(params);
   }
 
