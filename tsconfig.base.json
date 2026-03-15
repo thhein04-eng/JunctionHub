@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@junction-hub": ["libs/shared/data-access-prisma/src/index.ts"]
+      "@junction-hub/shared/data-access-prisma": [
+        "libs/shared/data-access-prisma/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
