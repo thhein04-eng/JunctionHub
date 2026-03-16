@@ -17,6 +17,9 @@
     "paths": {
       "@junction-hub/shared/data-access-prisma": [
         "libs/shared/data-access-prisma/src/index.ts"
+      ],
+      "@junction-hub/shared/data-access-fga": [
+        "libs/shared/data-access-fga/src/index.ts"
       ]
     }
   },

@@ -1,0 +1,27 @@
+{
+  "name": "data-access-fga",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/data-access-fga/src",
+  "projectType": "library",
+  "tags": ["scope:shared", "tag:data-access"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/data-access-fga",
+        "tsConfig": "libs/shared/data-access-fga/tsconfig.lib.json",
+        "packageJson": "libs/shared/data-access-fga/package.json",
+        "main": "libs/shared/data-access-fga/src/index.ts",
+        "assets": ["libs/shared/data-access-fga/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/shared/data-access-fga/jest.config.cts"
+      }
+    }
+  }
+}
