@@ -19,6 +19,9 @@ model Organization {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
+  fgaStoreId  String? @map("fga_store_id")
+  fgaModelId  String? @map("fga_model_id")
+
   industryType IndustryType @relation(fields: [industryTypeId], references: [id])
   members      Member[]
   resources    Resource[]

@@ -30,6 +30,8 @@ export type OrganizationMinAggregateOutputType = {
   industryTypeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  fgaStoreId: string | null
+  fgaModelId: string | null
 }
 
 export type OrganizationMaxAggregateOutputType = {
@@ -38,6 +40,8 @@ export type OrganizationMaxAggregateOutputType = {
   industryTypeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  fgaStoreId: string | null
+  fgaModelId: string | null
 }
 
 export type OrganizationCountAggregateOutputType = {
@@ -46,6 +50,8 @@ export type OrganizationCountAggregateOutputType = {
   industryTypeId: number
   createdAt: number
   updatedAt: number
+  fgaStoreId: number
+  fgaModelId: number
   _all: number
 }
 
@@ -56,6 +62,8 @@ export type OrganizationMinAggregateInputType = {
   industryTypeId?: true
   createdAt?: true
   updatedAt?: true
+  fgaStoreId?: true
+  fgaModelId?: true
 }
 
 export type OrganizationMaxAggregateInputType = {
@@ -64,6 +72,8 @@ export type OrganizationMaxAggregateInputType = {
   industryTypeId?: true
   createdAt?: true
   updatedAt?: true
+  fgaStoreId?: true
+  fgaModelId?: true
 }
 
 export type OrganizationCountAggregateInputType = {
@@ -72,6 +82,8 @@ export type OrganizationCountAggregateInputType = {
   industryTypeId?: true
   createdAt?: true
   updatedAt?: true
+  fgaStoreId?: true
+  fgaModelId?: true
   _all?: true
 }
 
@@ -153,6 +165,8 @@ export type OrganizationGroupByOutputType = {
   industryTypeId: string
   createdAt: Date
   updatedAt: Date
+  fgaStoreId: string | null
+  fgaModelId: string | null
   _count: OrganizationCountAggregateOutputType | null
   _min: OrganizationMinAggregateOutputType | null
   _max: OrganizationMaxAggregateOutputType | null
@@ -182,6 +196,8 @@ export type OrganizationWhereInput = {
   industryTypeId?: Prisma.UuidFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  fgaStoreId?: Prisma.StringNullableFilter<"Organization"> | string | null
+  fgaModelId?: Prisma.StringNullableFilter<"Organization"> | string | null
   industryType?: Prisma.XOR<Prisma.IndustryTypeScalarRelationFilter, Prisma.IndustryTypeWhereInput>
   members?: Prisma.MemberListRelationFilter
   resources?: Prisma.ResourceListRelationFilter
@@ -193,6 +209,8 @@ export type OrganizationOrderByWithRelationInput = {
   industryTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fgaStoreId?: Prisma.SortOrderInput | Prisma.SortOrder
+  fgaModelId?: Prisma.SortOrderInput | Prisma.SortOrder
   industryType?: Prisma.IndustryTypeOrderByWithRelationInput
   members?: Prisma.MemberOrderByRelationAggregateInput
   resources?: Prisma.ResourceOrderByRelationAggregateInput
@@ -207,6 +225,8 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   industryTypeId?: Prisma.UuidFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  fgaStoreId?: Prisma.StringNullableFilter<"Organization"> | string | null
+  fgaModelId?: Prisma.StringNullableFilter<"Organization"> | string | null
   industryType?: Prisma.XOR<Prisma.IndustryTypeScalarRelationFilter, Prisma.IndustryTypeWhereInput>
   members?: Prisma.MemberListRelationFilter
   resources?: Prisma.ResourceListRelationFilter
@@ -218,6 +238,8 @@ export type OrganizationOrderByWithAggregationInput = {
   industryTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fgaStoreId?: Prisma.SortOrderInput | Prisma.SortOrder
+  fgaModelId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OrganizationCountOrderByAggregateInput
   _max?: Prisma.OrganizationMaxOrderByAggregateInput
   _min?: Prisma.OrganizationMinOrderByAggregateInput
@@ -232,6 +254,8 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   industryTypeId?: Prisma.UuidWithAggregatesFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
+  fgaStoreId?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  fgaModelId?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
 }
 
 export type OrganizationCreateInput = {
@@ -239,6 +263,8 @@ export type OrganizationCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   industryType: Prisma.IndustryTypeCreateNestedOneWithoutOrganizationsInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   resources?: Prisma.ResourceCreateNestedManyWithoutOrgInput
@@ -250,6 +276,8 @@ export type OrganizationUncheckedCreateInput = {
   industryTypeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutOrgInput
 }
@@ -259,6 +287,8 @@ export type OrganizationUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   industryType?: Prisma.IndustryTypeUpdateOneRequiredWithoutOrganizationsNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   resources?: Prisma.ResourceUpdateManyWithoutOrgNestedInput
@@ -270,6 +300,8 @@ export type OrganizationUncheckedUpdateInput = {
   industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutOrgNestedInput
 }
@@ -280,6 +312,8 @@ export type OrganizationCreateManyInput = {
   industryTypeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
 }
 
 export type OrganizationUpdateManyMutationInput = {
@@ -287,6 +321,8 @@ export type OrganizationUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrganizationUncheckedUpdateManyInput = {
@@ -295,6 +331,8 @@ export type OrganizationUncheckedUpdateManyInput = {
   industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrganizationCountOrderByAggregateInput = {
@@ -303,6 +341,8 @@ export type OrganizationCountOrderByAggregateInput = {
   industryTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fgaStoreId?: Prisma.SortOrder
+  fgaModelId?: Prisma.SortOrder
 }
 
 export type OrganizationMaxOrderByAggregateInput = {
@@ -311,6 +351,8 @@ export type OrganizationMaxOrderByAggregateInput = {
   industryTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fgaStoreId?: Prisma.SortOrder
+  fgaModelId?: Prisma.SortOrder
 }
 
 export type OrganizationMinOrderByAggregateInput = {
@@ -319,6 +361,8 @@ export type OrganizationMinOrderByAggregateInput = {
   industryTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fgaStoreId?: Prisma.SortOrder
+  fgaModelId?: Prisma.SortOrder
 }
 
 export type OrganizationListRelationFilter = {
@@ -342,6 +386,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type OrganizationCreateNestedManyWithoutIndustryTypeInput = {
@@ -419,6 +467,8 @@ export type OrganizationCreateWithoutIndustryTypeInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   resources?: Prisma.ResourceCreateNestedManyWithoutOrgInput
 }
@@ -428,6 +478,8 @@ export type OrganizationUncheckedCreateWithoutIndustryTypeInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutOrgInput
 }
@@ -467,6 +519,8 @@ export type OrganizationScalarWhereInput = {
   industryTypeId?: Prisma.UuidFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  fgaStoreId?: Prisma.StringNullableFilter<"Organization"> | string | null
+  fgaModelId?: Prisma.StringNullableFilter<"Organization"> | string | null
 }
 
 export type OrganizationCreateWithoutResourcesInput = {
@@ -474,6 +528,8 @@ export type OrganizationCreateWithoutResourcesInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   industryType: Prisma.IndustryTypeCreateNestedOneWithoutOrganizationsInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
 }
@@ -484,6 +540,8 @@ export type OrganizationUncheckedCreateWithoutResourcesInput = {
   industryTypeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -508,6 +566,8 @@ export type OrganizationUpdateWithoutResourcesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   industryType?: Prisma.IndustryTypeUpdateOneRequiredWithoutOrganizationsNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
 }
@@ -518,6 +578,8 @@ export type OrganizationUncheckedUpdateWithoutResourcesInput = {
   industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -526,6 +588,8 @@ export type OrganizationCreateWithoutMembersInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   industryType: Prisma.IndustryTypeCreateNestedOneWithoutOrganizationsInput
   resources?: Prisma.ResourceCreateNestedManyWithoutOrgInput
 }
@@ -536,6 +600,8 @@ export type OrganizationUncheckedCreateWithoutMembersInput = {
   industryTypeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutOrgInput
 }
 
@@ -560,6 +626,8 @@ export type OrganizationUpdateWithoutMembersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   industryType?: Prisma.IndustryTypeUpdateOneRequiredWithoutOrganizationsNestedInput
   resources?: Prisma.ResourceUpdateManyWithoutOrgNestedInput
 }
@@ -570,6 +638,8 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
   industryTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutOrgNestedInput
 }
 
@@ -578,6 +648,8 @@ export type OrganizationCreateManyIndustryTypeInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fgaStoreId?: string | null
+  fgaModelId?: string | null
 }
 
 export type OrganizationUpdateWithoutIndustryTypeInput = {
@@ -585,6 +657,8 @@ export type OrganizationUpdateWithoutIndustryTypeInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   resources?: Prisma.ResourceUpdateManyWithoutOrgNestedInput
 }
@@ -594,6 +668,8 @@ export type OrganizationUncheckedUpdateWithoutIndustryTypeInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutOrgNestedInput
 }
@@ -603,6 +679,8 @@ export type OrganizationUncheckedUpdateManyWithoutIndustryTypeInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fgaStoreId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fgaModelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -651,6 +729,8 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   industryTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fgaStoreId?: boolean
+  fgaModelId?: boolean
   industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
   resources?: boolean | Prisma.Organization$resourcesArgs<ExtArgs>
@@ -663,6 +743,8 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   industryTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fgaStoreId?: boolean
+  fgaModelId?: boolean
   industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -672,6 +754,8 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   industryTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fgaStoreId?: boolean
+  fgaModelId?: boolean
   industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -681,9 +765,11 @@ export type OrganizationSelectScalar = {
   industryTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fgaStoreId?: boolean
+  fgaModelId?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "industryTypeId" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "industryTypeId" | "createdAt" | "updatedAt" | "fgaStoreId" | "fgaModelId", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   industryType?: boolean | Prisma.IndustryTypeDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
@@ -710,6 +796,8 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     industryTypeId: string
     createdAt: Date
     updatedAt: Date
+    fgaStoreId: string | null
+    fgaModelId: string | null
   }, ExtArgs["result"]["organization"]>
   composites: {}
 }
@@ -1141,6 +1229,8 @@ export interface OrganizationFieldRefs {
   readonly industryTypeId: Prisma.FieldRef<"Organization", 'String'>
   readonly createdAt: Prisma.FieldRef<"Organization", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Organization", 'DateTime'>
+  readonly fgaStoreId: Prisma.FieldRef<"Organization", 'String'>
+  readonly fgaModelId: Prisma.FieldRef<"Organization", 'String'>
 }
     
 
