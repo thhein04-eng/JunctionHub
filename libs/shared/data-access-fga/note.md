@@ -62,7 +62,7 @@ export class FgaClientService implements OnModuleInit {
 ```typescript
 import { Injectable, Logger } from '@nestjs/common';
 import { FgaClientService } from './fga-client.service';
-import { transformDSLToJSON } from '@openfga/syntax-transformer';
+import { transformer } from '@openfga/syntax-transformer';
 
 // ─── Permission config per industry type ─────────────────────────────────────
 // Defines permission relations per resource type slug.
@@ -189,13 +189,14 @@ export class FgaModelService {
   // ─── Write model to FGA store ─────────────────────────────────────────────
 
   async writeModel(storeId: string, dsl: string): Promise<string> {
-    const client = this.fgaClient.forStore(storeId);
+    const client = this.dataAccessFgaClientService.forStore(storeId);
 
-    const { type_definitions, schema_version } = transformDSLToJSON(dsl);
+    // transformDSLToJSONObject returns the full model object
+    const model = transformer.transformDSLToJSONObject(dsl);
 
     const res = await client.writeAuthorizationModel({
-      schema_version,
-      type_definitions,
+      schema_version: model.schema_version,
+      type_definitions: model.type_definitions,
     });
 
     this.logger.log(`FGA model written to store ${storeId} → model ${res.authorization_model_id}`);
@@ -218,10 +219,15 @@ export class FgaModelService {
 
 ```typescript
 import { Injectable, Logger } from '@nestjs/common';
-import { ClientTuple } from '@openfga/sdk';
-import { FgaClientService } from './fga-client.service';
+import { DataAccessFgaClientService } from './data-access-fga-client.service';
 
 const BATCH_SIZE = 10; // FGA write API max per call
+
+interface FgaTupleKey {
+  user: string;
+  relation: string;
+  object: string;
+}
 
 export interface TupleInput {
   userType: string; // e.g. 'user' or a resource type slug
@@ -235,13 +241,13 @@ export interface TupleInput {
 export class FgaTupleService {
   private readonly logger = new Logger(FgaTupleService.name);
 
-  constructor(private readonly fgaClient: FgaClientService) {}
+  constructor(private readonly dataAccessFgaClientService: DataAccessFgaClientService) {}
 
   // ─── Write tuples ─────────────────────────────────────────────────────────
 
   async write(storeId: string, tuples: TupleInput[]): Promise<void> {
     if (tuples.length === 0) return;
-    const client = this.fgaClient.forStore(storeId);
+    const client = this.dataAccessFgaClientService.forStore(storeId);
     const mapped = this.mapTuples(tuples);
 
     for (let i = 0; i < mapped.length; i += BATCH_SIZE) {
@@ -254,7 +260,7 @@ export class FgaTupleService {
 
   async delete(storeId: string, tuples: TupleInput[]): Promise<void> {
     if (tuples.length === 0) return;
-    const client = this.fgaClient.forStore(storeId);
+    const client = this.dataAccessFgaClientService.forStore(storeId);
     const mapped = this.mapTuples(tuples);
 
     for (let i = 0; i < mapped.length; i += BATCH_SIZE) {
@@ -266,7 +272,7 @@ export class FgaTupleService {
   // ─── Check a single permission ────────────────────────────────────────────
 
   async check(storeId: string, userId: string, relation: string, objectType: string, objectId: string): Promise<boolean> {
-    const client = this.fgaClient.forStore(storeId);
+    const client = this.dataAccessFgaClientService.forStore(storeId);
     const res = await client.check({
       user: `user:${userId}`,
       relation,
@@ -277,7 +283,15 @@ export class FgaTupleService {
 
   // ─── Batch check multiple permissions ────────────────────────────────────
 
-  async batchCheck(storeId: string, checks: { userId: string; relation: string; objectType: string; objectId: string }[]): Promise<boolean[]> {
+  async batchCheck(
+    storeId: string,
+    checks: {
+      userId: string;
+      relation: string;
+      objectType: string;
+      objectId: string;
+    }[],
+  ): Promise<boolean[]> {
     const results = await Promise.all(checks.map((c) => this.check(storeId, c.userId, c.relation, c.objectType, c.objectId)));
     return results;
   }
@@ -285,7 +299,7 @@ export class FgaTupleService {
   // ─── List all objects a user has access to ────────────────────────────────
 
   async listObjects(storeId: string, userId: string, relation: string, objectType: string): Promise<string[]> {
-    const client = this.fgaClient.forStore(storeId);
+    const client = this.dataAccessFgaClientService.forStore(storeId);
     const res = await client.listObjects({
       user: `user:${userId}`,
       relation,
@@ -370,12 +384,21 @@ export class FgaTupleService {
 
   // ─── Private helpers ──────────────────────────────────────────────────────
 
-  private mapTuples(tuples: TupleInput[]): ClientTuple[] {
+  private mapTuples(tuples: TupleInput[]): FgaTupleKey[] {
     return tuples.map((t) => ({
       user: `${t.userType}:${t.userId}`,
       relation: t.relation,
       object: `${t.objectType}:${t.objectId}`,
     }));
+  }
+
+  private async writeTuples(storeId: string, tuples: FgaTupleKey[]): Promise<void> {
+    const client = this.dataAccessFgaClientService.forStore(storeId);
+
+    for (let i = 0; i < tuples.length; i += BATCH_SIZE) {
+      await client.write({ writes: tuples.slice(i, i + BATCH_SIZE) });
+    }
+    this.logger.debug(`Wrote ${tuples.length} tuple(s) to store ${storeId}`);
   }
 }
 ```
