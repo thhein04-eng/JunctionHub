@@ -26,6 +26,8 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.0",
     "@nx/nest": "^22.5.4",
+    "@openfga/sdk": "^0.9.3",
+    "@openfga/syntax-transformer": "^0.2.1",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "axios": "^1.6.0",
