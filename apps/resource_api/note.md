@@ -21,41 +21,34 @@ export class AppModule {}
 
 ```typescript
 import { IsString, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateResourceDto {
-  @ApiProperty({ example: 'Science Department' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: 'Slug of the resource type', example: 'department' })
   @IsString()
   @IsNotEmpty()
   resourceTypeSlug: string;
 }
 
 export class RenameResourceDto {
-  @ApiProperty({ example: 'Springfield Elementary' })
   @IsString()
   @IsNotEmpty()
   name: string;
 }
 
 export class CreateRelationshipDto {
-  @ApiProperty({ description: 'ID of the target resource' })
   @IsUUID()
   @IsNotEmpty()
   targetResourceId: string;
 
-  @ApiProperty({ example: 'has_classroom' })
   @IsString()
   @IsNotEmpty()
   relationLabel: string;
 }
 
 export class ListResourcesDto {
-  @ApiPropertyOptional({ description: 'Filter by resource type slug', example: 'classroom' })
   @IsString()
   @IsOptional()
   typeSlug?: string;
@@ -274,53 +267,44 @@ export class ResourceService {
 
 ```typescript
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResourceService } from './resource.service';
 import { CreateResourceDto, RenameResourceDto, CreateRelationshipDto, ListResourcesDto } from './dto';
 
-@ApiTags('Resources')
 @Controller('organizations/:orgId/resources')
 export class ResourceController {
   constructor(private readonly service: ResourceService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a resource instance' })
   create(@Param('orgId') orgId: string, @Body() dto: CreateResourceDto) {
     return this.service.create(orgId, dto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'List all resources (optionally filtered by type)' })
   findAll(@Param('orgId') orgId: string, @Query() query: ListResourcesDto) {
     return this.service.findAll(orgId, query.typeSlug);
   }
 
   @Get('tree/:rootResourceId')
-  @ApiOperation({ summary: 'Get hierarchical tree from a root resource' })
   getTree(@Param('orgId') orgId: string, @Param('rootResourceId') rootResourceId: string) {
     return this.service.getTree(orgId, rootResourceId);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a single resource with its relationships' })
   findOne(@Param('orgId') orgId: string, @Param('id') id: string) {
     return this.service.findOne(orgId, id);
   }
 
   @Patch(':id/rename')
-  @ApiOperation({ summary: 'Rename a resource' })
   rename(@Param('orgId') orgId: string, @Param('id') id: string, @Body() dto: RenameResourceDto) {
     return this.service.rename(orgId, id, dto);
   }
 
   @Post(':id/relationships')
-  @ApiOperation({ summary: 'Link this resource to another' })
   createRelationship(@Param('orgId') orgId: string, @Param('id') id: string, @Body() dto: CreateRelationshipDto) {
     return this.service.createRelationship(orgId, id, dto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a resource (blocked if it has children)' })
   delete(@Param('orgId') orgId: string, @Param('id') id: string) {
     return this.service.delete(orgId, id);
   }
@@ -341,4 +325,166 @@ import { ResourceController } from './resource.controller';
   providers: [ResourceService],
 })
 export class ResourceModule {}
+```
+
+# Verification
+
+Base URL: `http://localhost:3000/api`
+Org ID: `de28e405-f680-4891-b729-26ebc90b3ea6`
+School Resource ID: `c1638d3a-7d3e-4603-8a18-2f224454cd5e`
+
+---
+
+## 1. List all resources (see what was seeded)
+
+```bash
+curl http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources \
+  | jq .
+```
+
+---
+
+## 2. Filter by type — only classrooms
+
+```bash
+curl "http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources?typeSlug=classroom" \
+  | jq .
+```
+
+---
+
+## 3. Get the hierarchy tree from the root school resource
+
+```bash
+curl http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/tree/c1638d3a-7d3e-4603-8a18-2f224454cd5e \
+  | jq .
+```
+
+---
+
+## 4. Rename "Default School" to "Springfield Elementary"
+
+```bash
+curl -X PATCH http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/c1638d3a-7d3e-4603-8a18-2f224454cd5e/rename \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Springfield Elementary"
+  }' | jq .
+```
+
+---
+
+## 5. Create a new department
+
+```bash
+curl -X POST http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Math Department",
+    "resourceTypeSlug": "department"
+  }' | jq .
+```
+
+> Copy the `id` from the response — replace `NEW_DEPARTMENT_ID` in the steps below.
+
+---
+
+## 6. Link the new department to the school
+
+```bash
+curl -X POST http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/c1638d3a-7d3e-4603-8a18-2f224454cd5e/relationships \
+  -H "Content-Type: application/json" \
+  -d '{
+    "targetResourceId": "46d9a3cd-993c-4f9a-9571-93c335235ebc",
+    "relationLabel": "has_department"
+  }' | jq .
+```
+
+---
+
+## 7. Create a classroom
+
+```bash
+curl -X POST http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Room 101",
+    "resourceTypeSlug": "classroom"
+  }' | jq .
+```
+
+> Copy the `id` from the response — replace `ROOM_101_ID` in the steps below.
+
+---
+
+## 8. Link the classroom to the department
+
+```bash
+curl -X POST http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/46d9a3cd-993c-4f9a-9571-93c335235ebc/relationships \
+  -H "Content-Type: application/json" \
+  -d '{
+    "targetResourceId": "d7bd40bc-497b-4705-b7ff-6926e4f72f86",
+    "relationLabel": "has_classroom"
+  }' | jq .
+```
+
+---
+
+## 9. Get Room 101 with all its relationships
+
+```bash
+curl http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/d7bd40bc-497b-4705-b7ff-6926e4f72f86 | jq .
+```
+
+---
+
+## 10. Try deleting the school (should fail — has children)
+
+```bash
+curl -X DELETE http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/c1638d3a-7d3e-4603-8a18-2f224454cd5e | jq .
+```
+
+Expected:
+
+```json
+{
+  "statusCode": 400,
+  "message": "Cannot delete resource with X linked child resource(s). Remove or reassign them first."
+}
+```
+
+---
+
+## 11. Delete Room 101 (no children — should succeed)
+
+```bash
+curl -X DELETE http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/d7bd40bc-497b-4705-b7ff-6926e4f72f86 | jq .
+```
+
+Expected:
+
+```json
+{ "deleted": true, "id": "ROOM_101_ID" }
+```
+
+---
+
+## 12. Try an invalid relationship (should fail)
+
+```bash
+curl -X POST http://localhost:3000/api/organizations/de28e405-f680-4891-b729-26ebc90b3ea6/resources/c1638d3a-7d3e-4603-8a18-2f224454cd5e/relationships \
+  -H "Content-Type: application/json" \
+  -d '{
+    "targetResourceId": "46d9a3cd-993c-4f9a-9571-93c335235ebc",
+    "relationLabel": "invalid_label"
+  }' | jq .
+```
+
+Expected:
+
+```json
+{
+  "statusCode": 400,
+  "message": "Relationship \"invalid_label\" is not defined between these resource types."
+}
 ```

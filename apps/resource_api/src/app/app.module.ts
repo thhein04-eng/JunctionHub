@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ResourceModule } from './resource/resource.module';
+import { DataAccessPrismaModule } from '@junction-hub/shared/data-access-prisma';
 
 @Module({
-  imports: [ResourceModule],
+  imports: [DataAccessPrismaModule, ResourceModule],
   controllers: [AppController],
   providers: [AppService],
 })
