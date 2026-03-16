@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DataAccessFgaClientService } from './data-access-fga-client.service';
 import { transformer } from '@openfga/syntax-transformer';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // ─── Permission config per industry type ─────────────────────────────────────
 // Defines permission relations per resource type slug.
@@ -16,18 +18,21 @@ export interface PermissionConfig {
 
 export const INDUSTRY_PERMISSION_CONFIG: Record<string, PermissionConfig> = {
   school: {
-    school: { permissions: ['admin', 'member'] },
-    department: { permissions: ['admin', 'member'], inheritFrom: 'parent' },
+    school: { permissions: ['admin', 'member', 'viewer'] },
+    department: {
+      permissions: ['admin', 'member', 'viewer'],
+      inheritFrom: 'parent',
+    },
     classroom: {
-      permissions: ['teacher', 'student', 'viewer'],
+      permissions: ['admin', 'member', 'viewer'],
       inheritFrom: 'parent',
     },
     course: {
-      permissions: ['teacher', 'student', 'viewer'],
+      permissions: ['admin', 'member', 'viewer'],
       inheritFrom: 'parent',
     },
-    student: { permissions: ['viewer'], inheritFrom: 'parent' },
-    teacher: { permissions: ['viewer'], inheritFrom: 'parent' },
+    student: { permissions: ['admin', 'member', 'viewer'] },
+    teacher: { permissions: ['admin', 'member', 'viewer'] },
   },
   hospital: {
     hospital: { permissions: ['admin', 'member'] },
@@ -50,8 +55,8 @@ export const INDUSTRY_PERMISSION_CONFIG: Record<string, PermissionConfig> = {
 };
 
 const DEFAULT_PERMISSION_CONFIG: PermissionConfig[string] = {
-  permissions: ['admin', 'editor', 'viewer'],
-  inheritFrom: 'parent',
+  permissions: ['admin', 'member', 'viewer'],
+  inheritFrom: undefined, // ← no inherit by default
 };
 
 // ─── DSL input types ──────────────────────────────────────────────────────────
@@ -106,7 +111,7 @@ export class DataAccessFgaModelService {
       outgoing.get(sourceSlug)?.push({ targetSlug, label: rel.relationLabel });
     }
 
-    const lines: string[] = ['model', '  schema 1.1', ''];
+    const lines: string[] = ['model', '  schema 1.1', '', 'type user', ''];
 
     for (const rt of resourceTypeDefs) {
       const config = permConfig[rt.slug] ?? DEFAULT_PERMISSION_CONFIG;
@@ -129,11 +134,19 @@ export class DataAccessFgaModelService {
       // 3. Permission relations
       for (const permission of config.permissions) {
         if (config.inheritFrom && incomingSlugs.length > 0) {
+          // Non-root — allow direct assignment AND inherit from parent
           lines.push(
             `    define ${permission}: [user] or ${permission} from ${config.inheritFrom}`,
           );
         } else {
-          lines.push(`    define ${permission}: [user]`);
+          // Root type
+          if (permission === 'member') {
+            lines.push(`    define ${permission}: [user] or admin`);
+          } else if (permission === 'viewer') {
+            lines.push(`    define ${permission}: [user] or member`);
+          } else {
+            lines.push(`    define ${permission}: [user]`);
+          }
         }
       }
 
@@ -177,5 +190,39 @@ export class DataAccessFgaModelService {
     );
     this.logger.debug(`Generated DSL for "${industryTypeSlug}":\n${dsl}`);
     return this.writeModel(storeId, dsl);
+  }
+
+  // From FGA Files
+
+  async provisionModelFromFile(
+    storeId: string,
+    industryTypeSlug: string,
+  ): Promise<string> {
+    const modelPath = path.join(__dirname, 'models', `${industryTypeSlug}.fga`);
+    console.log(__dirname, modelPath);
+    if (!fs.existsSync(modelPath)) {
+      throw new Error(
+        `No FGA model file found for industry type "${industryTypeSlug}"`,
+      );
+    }
+
+    const dsl = fs.readFileSync(modelPath, 'utf-8');
+    return this.writeModelFromFile(storeId, dsl);
+  }
+
+  private async writeModelFromFile(
+    storeId: string,
+    dsl: string,
+  ): Promise<string> {
+    const client = this.dataAccessFgaClientService.forStore(storeId);
+    const { type_definitions, schema_version } =
+      transformer.transformDSLToJSONObject(dsl);
+
+    const res = await client.writeAuthorizationModel({
+      schema_version,
+      type_definitions,
+    });
+
+    return res.authorization_model_id;
   }
 }

@@ -10,10 +10,14 @@ import {
   RenameResourceDto,
   CreateRelationshipDto,
 } from './dto';
+import { DataAccessFgaTupleService } from '@junction-hub/shared/data-access-fga';
 
 @Injectable()
 export class ResourceService {
-  constructor(private readonly prisma: DataAccessPrismaService) {}
+  constructor(
+    private readonly prisma: DataAccessPrismaService,
+    private readonly fgaTuple: DataAccessFgaTupleService,
+  ) {}
 
   // ─── Create ────────────────────────────────────────────────────────────────
 
@@ -176,7 +180,7 @@ export class ResourceService {
     if (existing)
       throw new ConflictException('This relationship already exists.');
 
-    return this.prisma.resourceRelationship.create({
+    const result = await this.prisma.resourceRelationship.create({
       data: {
         orgId,
         relationshipDefId: relationshipDef.id,
@@ -189,6 +193,32 @@ export class ResourceService {
         targetResource: true,
       },
     });
+
+    // FGA tuple write — added after DB write
+    try {
+      const org = await this.prisma.organization.findUnique({
+        where: { id: orgId },
+      });
+      if (org?.fgaStoreId) {
+        await this.fgaTuple.writeStructural(
+          org.fgaStoreId,
+          source.resourceTypeDef.slug, // ← from assertResourceExists
+          sourceResourceId,
+          target.resourceTypeDef.slug, // ← from assertResourceExists
+          dto.targetResourceId,
+        );
+        console.log('FGA tuple written for relationship');
+      } else {
+        console.log('No fgaStoreId on org — skipping FGA tuple write');
+      }
+    } catch (err) {
+      console.error(
+        `FGA tuple write failed for relationship ${result.id}:`,
+        err,
+      );
+    }
+
+    return result;
   }
 
   // ─── Delete resource ───────────────────────────────────────────────────────
@@ -196,7 +226,6 @@ export class ResourceService {
   async delete(orgId: string, resourceId: string) {
     await this.assertResourceExists(orgId, resourceId);
 
-    // Block deletion if this resource has children (is a source in any relationship)
     const childCount = await this.prisma.resourceRelationship.count({
       where: { orgId, sourceResourceId: resourceId },
     });
@@ -206,13 +235,43 @@ export class ResourceService {
       );
     }
 
-    // Delete incoming relationships (where this resource is a target)
+    // 🆕 Fetch incoming relationships before deleting — needed for FGA tuple cleanup
+    const incomingRels = await this.prisma.resourceRelationship.findMany({
+      where: { orgId, targetResourceId: resourceId },
+      include: {
+        sourceResource: { include: { resourceTypeDef: true } },
+        targetResource: { include: { resourceTypeDef: true } },
+      },
+    });
+
+    // ✅ existing DB deletes — no changes
     await this.prisma.resourceRelationship.deleteMany({
       where: { orgId, targetResourceId: resourceId },
     });
 
     await this.prisma.resource.delete({ where: { id: resourceId } });
 
+    // 🆕 FGA tuple cleanup — added after DB deletes
+    try {
+      const org = await this.prisma.organization.findUnique({
+        where: { id: orgId },
+      });
+      if (org?.fgaStoreId) {
+        for (const rel of incomingRels) {
+          await this.fgaTuple.deleteStructural(
+            org.fgaStoreId,
+            rel.sourceResource.resourceTypeDef.slug,
+            rel.sourceResourceId,
+            rel.targetResource.resourceTypeDef.slug,
+            resourceId,
+          );
+        }
+      }
+    } catch (err) {
+      console.error(`FGA tuple delete failed for resource ${resourceId}:`, err);
+    }
+
+    // ✅ existing return — no changes
     return { deleted: true, id: resourceId };
   }
 
@@ -229,6 +288,7 @@ export class ResourceService {
   private async assertResourceExists(orgId: string, resourceId: string) {
     const resource = await this.prisma.resource.findFirst({
       where: { id: resourceId, orgId },
+      include: { resourceTypeDef: true }, // 🆕
     });
     if (!resource)
       throw new NotFoundException(`Resource "${resourceId}" not found.`);

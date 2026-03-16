@@ -9,6 +9,11 @@ import {
 } from '@junction-hub/shared/data-access-prisma';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { FindAllOrganizationDto } from './dto/find-all-organization.dto';
+import {
+  DataAccessFgaClientService,
+  DataAccessFgaModelService,
+  DataAccessFgaTupleService,
+} from '@junction-hub/shared/data-access-fga';
 
 interface CreateWithSeedInput {
   name: string;
@@ -17,7 +22,12 @@ interface CreateWithSeedInput {
 
 @Injectable()
 export class OrganizationService {
-  constructor(private dataAccessPrismaService: DataAccessPrismaService) {}
+  constructor(
+    private readonly dataAccessPrismaService: DataAccessPrismaService,
+    private readonly dataAccessFgaClientService: DataAccessFgaClientService,
+    private readonly dataAccessFgaModelService: DataAccessFgaModelService,
+    private readonly dataAccessFgaTupleService: DataAccessFgaTupleService,
+  ) {}
 
   async create(createOrganizationDto: CreateOrganizationDto) {
     await this.createWithSeed({
@@ -25,6 +35,7 @@ export class OrganizationService {
       industryTypeSlug: 'school',
     });
   }
+
   async createWithSeed(input: CreateWithSeedInput) {
     const industryType =
       await this.dataAccessPrismaService.industryType.findUnique({
@@ -37,82 +48,149 @@ export class OrganizationService {
       );
     }
 
-    return this.dataAccessPrismaService.$transaction(async (tx) => {
-      const org = await tx.organization.create({
-        data: { name: input.name, industryTypeId: industryType.id },
-      });
+    // 1. Run existing DB transaction
+    const result = await this.dataAccessPrismaService.$transaction(
+      async (tx) => {
+        const org = await tx.organization.create({
+          data: { name: input.name, industryTypeId: industryType.id },
+        });
 
-      const essentialTypes = industryType.resourceTypeDefs.filter(
-        (rt) => rt.isEssential,
-      );
-      if (essentialTypes.length === 0) {
+        const essentialTypes = industryType.resourceTypeDefs.filter(
+          (rt) => rt.isEssential,
+        );
+        if (essentialTypes.length === 0) {
+          return {
+            org,
+            seed: {
+              resourcesCreated: 0,
+              relationshipsCreated: 0,
+              resourceMap: {},
+            },
+            relationships: [],
+          };
+        }
+
+        const ordered = this.topologicalSort(
+          essentialTypes,
+          industryType.relationships,
+        );
+
+        const typeIdToInstanceId: Record<string, string> = {};
+        for (const rt of ordered) {
+          const resource = await tx.resource.create({
+            data: {
+              orgId: org.id,
+              resourceTypeDefinitionId: rt.id,
+              name: `Default ${rt.label}`,
+            },
+          });
+          typeIdToInstanceId[rt.id] = resource.id;
+        }
+
+        const seededIds = new Set(Object.keys(typeIdToInstanceId));
+        let relationshipsCreated = 0;
+        const seededRelationships: {
+          sourceTypeSlug: string;
+          sourceId: string;
+          targetTypeSlug: string;
+          targetId: string;
+        }[] = [];
+
+        for (const rel of industryType.relationships) {
+          if (
+            seededIds.has(rel.sourceResourceTypeId) &&
+            seededIds.has(rel.targetResourceTypeId)
+          ) {
+            await tx.resourceRelationship.create({
+              data: {
+                orgId: org.id,
+                relationshipDefId: rel.id,
+                sourceResourceId: typeIdToInstanceId[rel.sourceResourceTypeId],
+                targetResourceId: typeIdToInstanceId[rel.targetResourceTypeId],
+              },
+            });
+            relationshipsCreated++;
+
+            // Collect for FGA tuple writing after transaction
+            const sourceSlug = industryType.resourceTypeDefs.find(
+              (rt) => rt.id === rel.sourceResourceTypeId,
+            )?.slug;
+            const targetSlug = industryType.resourceTypeDefs.find(
+              (rt) => rt.id === rel.targetResourceTypeId,
+            )?.slug;
+            if (sourceSlug && targetSlug) {
+              seededRelationships.push({
+                sourceTypeSlug: sourceSlug,
+                sourceId: typeIdToInstanceId[rel.sourceResourceTypeId],
+                targetTypeSlug: targetSlug,
+                targetId: typeIdToInstanceId[rel.targetResourceTypeId],
+              });
+            }
+          }
+        }
+
+        const typeMap = new Map(
+          industryType.resourceTypeDefs.map((rt) => [rt.id, rt.slug]),
+        );
+        const resourceMap: Record<string, string> = {};
+        for (const [typeId, instanceId] of Object.entries(typeIdToInstanceId)) {
+          const slug = typeMap.get(typeId);
+          if (slug) resourceMap[slug] = instanceId;
+        }
+
         return {
           org,
           seed: {
-            resourcesCreated: 0,
-            relationshipsCreated: 0,
-            resourceMap: {},
+            resourcesCreated: ordered.length,
+            relationshipsCreated,
+            resourceMap,
           },
+          relationships: seededRelationships,
         };
-      }
+      },
+    );
 
-      const ordered = this.topologicalSort(
-        essentialTypes,
-        industryType.relationships,
+    // 2. Provision FGA store + model + tuples (outside transaction — FGA is external)
+    try {
+      const storeId = await this.dataAccessFgaClientService.createStore(
+        input.name,
       );
 
-      // Insert resource instances
-      const typeIdToInstanceId: Record<string, string> = {};
-      for (const rt of ordered) {
-        const resource = await tx.resource.create({
-          data: {
-            orgId: org.id,
-            resourceTypeDefinitionId: rt.id,
-            name: `Default ${rt.label}`,
-          },
-        });
-        typeIdToInstanceId[rt.id] = resource.id;
-      }
+      // const modelId = await this.dataAccessFgaModelService.provisionModel(
+      //   storeId,
+      //   industryType.slug,
+      //   industryType.resourceTypeDefs,
+      //   industryType.relationships,
+      // );
 
-      // Wire relationships
-      const seededIds = new Set(Object.keys(typeIdToInstanceId));
-      let relationshipsCreated = 0;
-      for (const rel of industryType.relationships) {
-        if (
-          seededIds.has(rel.sourceResourceTypeId) &&
-          seededIds.has(rel.targetResourceTypeId)
-        ) {
-          await tx.resourceRelationship.create({
-            data: {
-              orgId: org.id,
-              relationshipDefId: rel.id,
-              sourceResourceId: typeIdToInstanceId[rel.sourceResourceTypeId],
-              targetResourceId: typeIdToInstanceId[rel.targetResourceTypeId],
-            },
-          });
-          relationshipsCreated++;
-        }
-      }
+      const modelId =
+        await this.dataAccessFgaModelService.provisionModelFromFile(
+          storeId,
+          industryType.slug,
+        );
 
-      // Build slug → instance id map
-      const typeMap = new Map(
-        industryType.resourceTypeDefs.map((rt) => [rt.id, rt.slug]),
+      await this.dataAccessPrismaService.organization.update({
+        where: { id: result.org.id },
+        data: { fgaStoreId: storeId, fgaModelId: modelId },
+      });
+
+      console.log(
+        'Seeded relationships for FGA:',
+        JSON.stringify(result.relationships, null, 2),
       );
-      const resourceMap: Record<string, string> = {};
-      for (const [typeId, instanceId] of Object.entries(typeIdToInstanceId)) {
-        const slug = typeMap.get(typeId);
-        if (slug) resourceMap[slug] = instanceId;
-      }
 
-      return {
-        org,
-        seed: {
-          resourcesCreated: ordered.length,
-          relationshipsCreated,
-          resourceMap,
-        },
-      };
-    });
+      if (result.relationships.length > 0) {
+        await this.dataAccessFgaTupleService.writeAllStructural(
+          storeId,
+          result.relationships,
+        );
+      }
+    } catch (err) {
+      // FGA failure should not fail onboarding — log and continue
+      console.error(`FGA provisioning failed for org ${result.org.id}:`, err);
+    }
+
+    return { org: result.org, seed: result.seed };
   }
 
   async findOne(id: string) {

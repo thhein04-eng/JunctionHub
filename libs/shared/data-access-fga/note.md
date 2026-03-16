@@ -543,3 +543,249 @@ export class ResourceService {
 ```bash
 npm install @openfga/sdk @openfga/syntax-transformer
 ```
+
+# FGA Verification
+
+- `organization_api` → http://localhost:3002
+- `resource_api` → http://localhost:3001
+- `OpenFGA` → http://localhost:8080
+
+Replace placeholder IDs as you go.
+
+---
+
+## 1. Onboard Springfield Elementary
+
+```bash
+curl -X POST http://localhost:3002/api/onboarding \
+  -H "Content-Type: application/json" \
+  -d '{
+    "orgName": "Springfield Elementary",
+    "industryTypeSlug": "school"
+  }' | jq .
+```
+
+> Copy `orgId`, `resourceMap.school`, `resourceMap.department`, `resourceMap.classroom`
+
+---
+
+## 2. Verify fgaStoreId + fgaModelId were saved on the org
+
+```bash
+curl http://localhost:3002/api/organizations/ORG_ID | jq '{fgaStoreId, fgaModelId}'
+```
+
+Both should be non-null strings.
+
+---
+
+## 3. Verify FGA store exists in OpenFGA
+
+```bash
+curl http://localhost:8080/stores | jq .
+```
+
+You should see a store named `Springfield Elementary`.
+
+---
+
+## 4. Verify the authorization model was written
+
+```bash
+curl http://localhost:8080/stores/FGA_STORE_ID/authorization-models | jq .
+```
+
+You should see types: `school`, `department`, `classroom`, `course`, `student`, `teacher`.
+
+---
+
+## 5. Verify seeded structural tuples were written
+
+```bash
+curl http://localhost:8080/stores/FGA_STORE_ID/tuples | jq .
+```
+
+Expected tuples:
+
+```json
+{ "user": "school:SCHOOL_ID",     "relation": "parent", "object": "department:DEPT_ID" }
+{ "user": "department:DEPT_ID",   "relation": "parent", "object": "classroom:CLASS_ID" }
+```
+
+---
+
+## 6. List all seeded resources
+
+```bash
+curl http://localhost:3001/api/organizations/ORG_ID/resources | jq .
+```
+
+---
+
+## 7. Create a new department
+
+```bash
+curl -X POST http://localhost:3001/api/organizations/ORG_ID/resources \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Science Department",
+    "resourceTypeSlug": "department"
+  }' | jq .
+```
+
+> Copy new department `id` → `NEW_DEPT_ID`
+
+---
+
+## 8. Link new department to school (triggers FGA tuple write)
+
+```bash
+curl -X POST http://localhost:3001/api/organizations/ORG_ID/resources/SCHOOL_RESOURCE_ID/relationships \
+  -H "Content-Type: application/json" \
+  -d '{
+    "targetResourceId": "NEW_DEPT_ID",
+    "relationLabel": "has_department"
+  }' | jq .
+```
+
+---
+
+## 9. Verify new tuple was written to FGA
+
+```bash
+curl http://localhost:8080/stores/FGA_STORE_ID/tuples | jq .
+```
+
+Expected new tuple:
+
+```json
+{ "user": "school:SCHOOL_RESOURCE_ID", "relation": "parent", "object": "department:NEW_DEPT_ID" }
+```
+
+---
+
+## 10. Assign alice as admin of the school
+
+```bash
+curl -X POST http://localhost:8080/stores/FGA_STORE_ID/write \
+  -H "Content-Type: application/json" \
+  -d '{
+    "writes": {
+      "tuple_keys": [{
+        "user": "user:alice",
+        "relation": "admin",
+        "object": "school:SCHOOL_RESOURCE_ID"
+      }]
+    }
+  }' | jq .
+```
+
+---
+
+## 11. Check alice has admin on school (direct)
+
+```bash
+curl -X POST http://localhost:8080/stores/FGA_STORE_ID/check \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tuple_key": {
+      "user": "user:alice",
+      "relation": "admin",
+      "object": "school:SCHOOL_RESOURCE_ID"
+    }
+  }' | jq .
+```
+
+Expected: `{ "allowed": true }`
+
+---
+
+## 12. Check alice has member on default department (inherited)
+
+```bash
+curl -X POST http://localhost:8080/stores/FGA_STORE_ID/check \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tuple_key": {
+      "user": "user:alice",
+      "relation": "member",
+      "object": "department:DEPT_ID"
+    }
+  }' | jq .
+```
+
+Expected: `{ "allowed": true }` — inherited from school admin via parent.
+
+---
+
+## 13. Check alice has member on new Science Department (inherited)
+
+```bash
+curl -X POST http://localhost:8080/stores/FGA_STORE_ID/check \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tuple_key": {
+      "user": "user:alice",
+      "relation": "member",
+      "object": "department:NEW_DEPT_ID"
+    }
+  }' | jq .
+```
+
+Expected: `{ "allowed": true }`
+
+---
+
+## 14. Check bob has no access (should be denied)
+
+```bash
+curl -X POST http://localhost:8080/stores/FGA_STORE_ID/check \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tuple_key": {
+      "user": "user:bob",
+      "relation": "member",
+      "object": "department:NEW_DEPT_ID"
+    }
+  }' | jq .
+```
+
+Expected: `{ "allowed": false }`
+
+---
+
+## 15. Delete the new Science Department (triggers FGA tuple delete)
+
+```bash
+curl -X DELETE http://localhost:3001/api/organizations/ORG_ID/resources/NEW_DEPT_ID | jq .
+```
+
+Expected: `{ "deleted": true, "id": "NEW_DEPT_ID" }`
+
+---
+
+## 16. Verify tuple was removed from FGA
+
+```bash
+curl http://localhost:8080/stores/FGA_STORE_ID/tuples | jq .
+```
+
+The `school → department` tuple for `NEW_DEPT_ID` should be gone.
+
+---
+
+## 17. Confirm alice no longer has access to deleted department
+
+```bash
+curl -X POST http://localhost:8080/stores/FGA_STORE_ID/check \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tuple_key": {
+      "user": "user:alice",
+      "relation": "member",
+      "object": "department:NEW_DEPT_ID"
+    }
+  }' | jq .
+```
+
+Expected: `{ "allowed": false }`

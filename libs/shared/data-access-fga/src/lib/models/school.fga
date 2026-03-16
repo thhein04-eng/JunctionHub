@@ -1,0 +1,43 @@
+model
+  schema 1.1
+
+type user
+
+type school
+  relations
+    define admin:  [user]
+    define member: [user] or admin
+    define viewer: [user] or member
+
+type department
+  relations
+    define parent: [school]
+    define admin:  [user] or admin  from parent
+    define member: [user] or member from parent
+    define viewer: [user] or viewer from parent
+
+type classroom
+  relations
+    define parent: [department]
+    define admin:  [user] or admin  from parent
+    define member: [user] or member from parent
+    define viewer: [user] or viewer from parent
+
+type course
+  relations
+    define parent: [department]
+    define admin:  [user] or admin  from parent
+    define member: [user] or member from parent
+    define viewer: [user] or viewer from parent
+
+type student
+  relations
+    define parent:  [classroom]
+    define member:  [user]
+    define viewer:  [user] or member
+
+type teacher
+  relations
+    define parent:  [classroom]
+    define member:  [user]
+    define viewer:  [user] or member

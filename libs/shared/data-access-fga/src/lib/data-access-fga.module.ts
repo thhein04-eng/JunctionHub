@@ -17,4 +17,4 @@ import { DataAccessFgaTupleService } from './data-access-fga-tuple.service';
     DataAccessFgaTupleService,
   ],
 })
-export class FgaModule {}
+export class DataAccessFgaModule {}

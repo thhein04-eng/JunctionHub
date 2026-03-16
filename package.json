@@ -9,7 +9,8 @@
     "prisma:generate": "npx prisma generate --config libs/shared/data-access-prisma/prisma.config.ts",
     "prisma:format": "npx prisma generate --config libs/shared/data-access-prisma/prisma.config.ts",
     "prisma:seed": "ts-node --project libs/shared/data-access-prisma/tsconfig.json libs/shared/data-access-prisma/prisma/seed.ts",
-    "prisma:seed-delete": "ts-node --project libs/shared/data-access-prisma/tsconfig.json libs/shared/data-access-prisma/prisma/seed.ts delete"
+    "prisma:seed-delete": "ts-node --project libs/shared/data-access-prisma/tsconfig.json libs/shared/data-access-prisma/prisma/seed.ts delete",
+    "fga:verify": "node scripts/verify-fga.mjs"
   },
   "private": true,
   "dependencies": {

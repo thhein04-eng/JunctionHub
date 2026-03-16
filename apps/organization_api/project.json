@@ -10,7 +10,14 @@
       "options": {
         "command": "webpack-cli build",
         "args": ["--node-env=production"],
-        "cwd": "apps/organization_api"
+        "cwd": "apps/organization_api",
+        "assets": [
+          {
+            "glob": "**/*.fga",
+            "input": "libs/shared/data-access-fga/src/lib/models",
+            "output": "models"
+          }
+        ]
       },
       "configurations": {
         "development": {
