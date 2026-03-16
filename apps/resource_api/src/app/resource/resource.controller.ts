@@ -15,8 +15,11 @@ import {
   CreateRelationshipDto,
   ListResourcesDto,
 } from './dto';
+import { UseGuards } from '@nestjs/common';
+import { FgaGuard } from '../../guards/fga.guard';
 
 @Controller('organizations/:orgId/resources')
+@UseGuards(FgaGuard)
 export class ResourceController {
   constructor(private readonly service: ResourceService) {}
 
