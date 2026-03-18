@@ -20,6 +20,9 @@
       ],
       "@junction-hub/shared/data-access-fga": [
         "libs/shared/data-access-fga/src/index.ts"
+      ],
+      "@junction-hub/data-access-auth": [
+        "libs/shared/data-access-auth/src/index.ts"
       ]
     }
   },
