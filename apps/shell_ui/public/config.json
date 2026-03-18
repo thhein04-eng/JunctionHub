@@ -1,0 +1,7 @@
+{
+  "keycloak": {
+    "url": "http://locolhost:8080",
+    "realm": "dev",
+    "clientId": "junction-hub"
+  }
+}
