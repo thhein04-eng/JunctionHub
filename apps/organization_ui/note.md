@@ -527,7 +527,7 @@ Each app runs on its own port. Update `project.json` for each:
 
 | App                 | Port |
 | ------------------- | ---- |
-| shell               | 4200 |
+| shell               | 9090 |
 | onboarding          | 4201 |
 | dashboard           | 4202 |
 | resource-management | 4203 |

@@ -57,8 +57,7 @@
       "continuous": true,
       "executor": "@nx/angular:module-federation-dev-server",
       "options": {
-        "port": 4200,
-        "publicHost": "http://localhost:4200"
+        "port": 9090
       },
       "configurations": {
         "production": {
@@ -92,7 +91,7 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "shell_ui:build",
-        "port": 4200,
+        "port": 9090,
         "spa": true
       }
     }
