@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { AppConfig } from './config.types';
 import { tap } from 'rxjs';
 import { HttpBackend, HttpClient } from '@angular/common/http';
@@ -10,10 +10,14 @@ export class ConfigService {
   private _config!: AppConfig;
   private http = new HttpClient(inject(HttpBackend));
 
+  readonly ready = signal(false);
+
   load() {
     return this.http.get<AppConfig>('/config.json').pipe(
       tap((c) => {
         this._config = c;
+        console.log('2. Config loaded');
+        this.ready.set(true);
       }),
     );
   }
