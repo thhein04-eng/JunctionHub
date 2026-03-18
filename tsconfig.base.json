@@ -23,7 +23,8 @@
       ],
       "@junction-hub/data-access-auth": [
         "libs/shared/data-access-auth/src/index.ts"
-      ]
+      ],
+      "@junction-hub/feature-auth": ["libs/shared/feature-auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
