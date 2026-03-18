@@ -25,7 +25,8 @@
         "libs/shared/data-access-auth/src/index.ts"
       ],
       "@junction-hub/feature-auth": ["libs/shared/feature-auth/src/index.ts"],
-      "@junction-hub/util-auth": ["libs/shared/util-auth/src/index.ts"]
+      "@junction-hub/util-auth": ["libs/shared/util-auth/src/index.ts"],
+      "@junction-hub/ui-auth": ["libs/shared/ui-auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
