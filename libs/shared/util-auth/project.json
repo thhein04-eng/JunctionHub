@@ -1,21 +1,21 @@
 {
-  "name": "feature-auth",
+  "name": "util-auth",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/feature-auth/src",
+  "sourceRoot": "libs/shared/util-auth/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:shared", "type:feature"],
+  "tags": ["scope:shared", "type:util"],
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "libs/shared/feature-auth/ng-package.json",
-        "tsConfig": "libs/shared/feature-auth/tsconfig.lib.json"
+        "project": "libs/shared/util-auth/ng-package.json",
+        "tsConfig": "libs/shared/util-auth/tsconfig.lib.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/shared/feature-auth/tsconfig.lib.prod.json"
+          "tsConfig": "libs/shared/util-auth/tsconfig.lib.prod.json"
         },
         "development": {}
       },
