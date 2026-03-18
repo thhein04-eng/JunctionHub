@@ -36,7 +36,8 @@
     "class-validator": "^0.14.4",
     "keycloak-js": "^26.2.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "~7.8.0"
+    "rxjs": "~7.8.0",
+    "@nx/angular": "22.5.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~21.1.0",
@@ -46,14 +47,15 @@
     "@angular/compiler-cli": "~21.1.0",
     "@angular/language-service": "~21.1.0",
     "@eslint/js": "^9.8.0",
+    "@module-federation/enhanced": "^0.21.2",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
-    "@nx/angular": "22.5.4",
     "@nx/devkit": "22.5.4",
     "@nx/eslint": "22.5.4",
     "@nx/eslint-plugin": "22.5.4",
     "@nx/jest": "22.5.4",
     "@nx/js": "22.5.4",
+    "@nx/module-federation": "22.5.4",
     "@nx/node": "22.5.4",
     "@nx/playwright": "22.5.4",
     "@nx/web": "22.5.4",
