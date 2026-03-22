@@ -25,7 +25,6 @@
         "libs/shared/data-access-auth/src/index.ts"
       ],
       "@junction-hub/feature-auth": ["libs/shared/feature-auth/src/index.ts"],
-      "@junction-hub/util-auth": ["libs/shared/util-auth/src/index.ts"],
       "@junction-hub/ui-auth": ["libs/shared/ui-auth/src/index.ts"],
       "@junction-hub/data-access-config": [
         "libs/shared/data-access-config/src/index.ts"
@@ -33,7 +32,8 @@
       "@junction-hub/util-config": ["libs/shared/util-config/src/index.ts"],
       "@junction-hub/data-access-auth-server": [
         "libs/shared/data-access-auth-server/src/index.ts"
-      ]
+      ],
+      "@junction-hub/util-auth": ["libs/shared/util-auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
