@@ -30,7 +30,10 @@
       "@junction-hub/data-access-config": [
         "libs/shared/data-access-config/src/index.ts"
       ],
-      "@junction-hub/util-config": ["libs/shared/util-config/src/index.ts"]
+      "@junction-hub/util-config": ["libs/shared/util-config/src/index.ts"],
+      "@junction-hub/data-access-auth-server": [
+        "libs/shared/data-access-auth-server/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

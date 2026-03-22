@@ -1,0 +1,27 @@
+{
+  "name": "data-access-auth-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/data-access-auth-server/src",
+  "projectType": "library",
+  "tags": ["scope:shared", "type:data-access"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/data-access-auth-server",
+        "tsConfig": "libs/shared/data-access-auth-server/tsconfig.lib.json",
+        "packageJson": "libs/shared/data-access-auth-server/package.json",
+        "main": "libs/shared/data-access-auth-server/src/index.ts",
+        "assets": ["libs/shared/data-access-auth-server/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/shared/data-access-auth-server/jest.config.cts"
+      }
+    }
+  }
+}
