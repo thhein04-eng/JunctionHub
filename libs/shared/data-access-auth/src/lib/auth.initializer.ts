@@ -3,17 +3,25 @@ import {
   withAutoRefreshToken,
   AutoRefreshTokenService,
   UserActivityService,
+  INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+  createInterceptorCondition,
+  IncludeBearerTokenCondition,
 } from 'keycloak-angular';
+import { KeycloakConfig, KeycloakInitOptions } from 'keycloak-js';
 
-export const provideAuth = () =>
+const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
+  urlPattern: /^(http:\/\/localhost:8181)(\/.*)?$/i,
+  bearerPrefix: 'Bearer',
+});
+
+export const provideAuth = (opts: {
+  config: KeycloakConfig;
+  initOpts: KeycloakInitOptions;
+}) =>
   provideKeycloak({
-    config: {
-      realm: 'dev',
-      url: 'http://localhost:8080',
-      clientId: 'junction_hub',
-    },
+    config: opts.config,
     initOptions: {
-      onLoad: 'login-required',
+      ...opts.initOpts,
       redirectUri: window.location.origin + '/',
     },
     features: [
@@ -22,5 +30,12 @@ export const provideAuth = () =>
         sessionTimeout: 1000,
       }),
     ],
-    providers: [AutoRefreshTokenService, UserActivityService],
+    providers: [
+      AutoRefreshTokenService,
+      UserActivityService,
+      {
+        provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+        useValue: [urlCondition],
+      },
+    ],
   });

@@ -1,7 +1,13 @@
 {
   "keycloak": {
-    "url": "http://localhost:8080",
-    "realm": "dev",
-    "clientId": "junction_hub"
+    "config": {
+      "realm": "dev",
+      "url": "http://localhost:8080",
+      "clientId": "junction_hub"
+    },
+    "initOptions": {
+      "onLoad": "login-required",
+      "pkceMethod": "S256"
+    }
   }
 }

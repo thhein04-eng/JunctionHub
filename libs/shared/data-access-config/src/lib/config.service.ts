@@ -1,28 +1,23 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { AppConfig } from './config.types';
-import { tap } from 'rxjs';
-import { HttpBackend, HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AppConfig } from '@junction-hub/util-config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  private _config!: AppConfig;
-  private http = new HttpClient(inject(HttpBackend));
+  private static config: AppConfig;
 
-  readonly ready = signal(false);
-
-  load() {
-    return this.http.get<AppConfig>('/config.json').pipe(
-      tap((c) => {
-        this._config = c;
-        console.log('2. Config loaded');
-        this.ready.set(true);
-      }),
-    );
+  static async load() {
+    const res = await fetch('/config.json');
+    const config = await res.json();
+    ConfigService.config = config;
   }
 
-  get config() {
-    return this._config;
+  static get authConfig() {
+    return { ...ConfigService.config.keycloak.config };
+  }
+
+  static get authInitOpts() {
+    return { ...ConfigService.config.keycloak.initOptions };
   }
 }

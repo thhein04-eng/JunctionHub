@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '@junction-hub/data-access-auth';
 
 @Component({
   imports: [RouterModule],
@@ -9,4 +10,5 @@ import { RouterModule } from '@angular/router';
 })
 export class App {
   protected title = 'shell_ui';
+  readonly auth = inject(AuthService);
 }
