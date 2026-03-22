@@ -1,1 +1,1 @@
-export * from './lib/config.types';
+export * from './lib/type';

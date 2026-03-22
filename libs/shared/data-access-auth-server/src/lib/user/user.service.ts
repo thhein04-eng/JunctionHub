@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import KcAdminClient from '@keycloak/keycloak-admin-client';
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from '@junction-hub/util-auth';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,7 @@ export class UserService {
     });
   }
 
-  async createUser(dto: any) {
+  async createUser(dto: CreateUserDto) {
     await this.authenticate();
     const id = await this.adminClient.users.create({
       username: dto.username,

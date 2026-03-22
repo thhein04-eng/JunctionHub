@@ -1,20 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from '@junction-hub/data-access-auth-server';
-
-interface CreateUserDto {
-  id?: string;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  emailVerified?: boolean;
-  attributes?: [][];
-  userProfileMetadata?: object;
-  enabled?: boolean;
-  self?: string;
-  origin?: string;
-  createdTimestamp?: number;
-}
+import { CreateUserDto } from '@junction-hub/util-auth';
 
 @Controller('users')
 export class UserController {
