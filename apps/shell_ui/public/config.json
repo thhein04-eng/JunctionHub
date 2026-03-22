@@ -2,6 +2,6 @@
   "keycloak": {
     "url": "http://localhost:8080",
     "realm": "dev",
-    "clientId": "junction-hub"
+    "clientId": "junction_hub"
   }
 }
