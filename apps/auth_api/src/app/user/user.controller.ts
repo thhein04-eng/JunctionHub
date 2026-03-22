@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { UserService } from '@junction-hub/data-access-auth-server';
 
 interface CreateUserDto {
   id?: string;
@@ -15,10 +16,12 @@ interface CreateUserDto {
   createdTimestamp?: number;
 }
 
-@Controller('user')
+@Controller('users')
 export class UserController {
+  constructor(private readonly userService: UserService) {}
+
   @Post()
   create(@Body() dto: CreateUserDto) {
-    throw new Error('not implemented');
+    this.userService.createUser(dto);
   }
 }
