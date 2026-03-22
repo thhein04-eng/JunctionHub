@@ -29,6 +29,9 @@ export class AuthService {
             })
             .then(() => {
               this.initialized = true;
+            })
+            .catch((e) => {
+              console.error('Error from Keycloak: ', e);
             }),
         );
       }),

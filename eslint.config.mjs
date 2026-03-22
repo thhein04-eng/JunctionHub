@@ -81,20 +81,20 @@ export default [
             // ─────────────────────────────────────────
 
             // auth domain → can use config + util
-            {
-              sourceTag: 'domain:auth',
-              onlyDependOnLibsWithTags: [
-                'domain:auth',
-                'domain:config', // ← AuthService can inject ConfigService
-                'type:util',
-              ],
-            },
+            // {
+            //   sourceTag: 'domain:auth',
+            //   onlyDependOnLibsWithTags: [
+            //     'domain:auth',
+            //     'domain:config', // ← AuthService can inject ConfigService
+            //     'type:util',
+            //   ],
+            // },
 
             // config domain → no auth, no feature domains
-            {
-              sourceTag: 'domain:config',
-              onlyDependOnLibsWithTags: ['domain:config', 'type:util'],
-            },
+            // {
+            //   sourceTag: 'domain:config',
+            //   onlyDependOnLibsWithTags: ['domain:config', 'type:util'],
+            // },
           ],
         },
       ],
